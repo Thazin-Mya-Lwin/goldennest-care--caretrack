@@ -1,57 +1,244 @@
 import streamlit as st
 import pandas as pd
 from datetime import date
+from pathlib import Path
 
-st.set_page_config(page_title="GoldenNest Care", layout="wide")
+st.set_page_config(
+    page_title="GoldenNest Care",
+    page_icon="🏡",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
 st.markdown("""
-    <style>
-    .banner {
-        background: linear-gradient(90deg, #FFF7E6 0%, #EAF2F8 100%);
-        padding: 20px 25px;
-        border-radius: 16px;
-        margin-bottom: 20px;
-        border: 1px solid #E0D3A8;
-    }
-    .banner-title {
-        font-size: 40px;
-        font-weight: 700;
-        color: #8B6F1E;
-        margin-bottom: 5px;
-    }
-    .banner-subtitle {
-        font-size: 24px;
-        font-weight: 600;
-        color: #1F3B5B;
-        margin-bottom: 8px;
-    }
-    .banner-text {
-        font-size: 16px;
-        color: #4B5563;
-    }
-    .founder-card {
-        background-color: #F9FAFB;
-        border: 1px solid #D9E2EC;
-        border-radius: 16px;
-        padding: 20px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-    </style>
+<style>
+:root {
+    --gold: #C9A227;
+    --gold-light: #E7C766;
+    --gold-soft: #FFF6DD;
+    --blue: #1F4E79;
+    --blue-dark: #163956;
+    --blue-soft: #EAF2FB;
+    --bg: #F8FAFD;
+    --card: #FFFFFF;
+    --text: #243447;
+    --muted: #5B6B7A;
+    --border: #E3EAF3;
+    --success-bg: #ECF9F1;
+    --success-border: #2F9E5B;
+    --warn-bg: #FFF6E8;
+    --warn-border: #D9921A;
+    --danger-bg: #FDECEC;
+    --danger-border: #D64545;
+}
+
+html, body, [class*="css"] {
+    font-family: "Segoe UI", sans-serif;
+}
+
+.stApp {
+    background: linear-gradient(180deg, #FFFCF4 0%, #F6F9FD 100%);
+    color: var(--text);
+}
+
+section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, var(--blue) 0%, var(--blue-dark) 100%);
+    border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+section[data-testid="stSidebar"] * {
+    color: #FFFFFF !important;
+}
+
+section[data-testid="stSidebar"] .stSelectbox label,
+section[data-testid="stSidebar"] .stDateInput label {
+    color: #F4F7FB !important;
+    font-weight: 600;
+}
+
+.main-title-card {
+    background: linear-gradient(135deg, #FFF7E3 0%, #EEF5FD 100%);
+    border: 1px solid #E7D7A4;
+    border-radius: 24px;
+    padding: 24px 28px;
+    margin-bottom: 22px;
+    box-shadow: 0 12px 30px rgba(31, 78, 121, 0.08);
+}
+
+.brand-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.logo-circle {
+    width: 78px;
+    height: 78px;
+    min-width: 78px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    font-weight: 800;
+    box-shadow: 0 10px 24px rgba(201, 162, 39, 0.28);
+}
+
+.brand-title {
+    font-size: 40px;
+    font-weight: 800;
+    color: #8A6A12;
+    line-height: 1.05;
+    margin: 0;
+}
+
+.brand-subtitle {
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--blue);
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+
+.brand-text {
+    font-size: 15px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.section-shell {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 18px 18px 16px 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+}
+
+.profile-box {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+}
+
+.mini-note {
+    background: linear-gradient(135deg, #FFF9E8 0%, #F7FBFF 100%);
+    border-left: 6px solid var(--gold);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: var(--muted);
+    margin-top: 8px;
+}
+
+.status-good {
+    background: var(--success-bg);
+    border-left: 6px solid var(--success-border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: #20613A;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.status-watch {
+    background: var(--warn-bg);
+    border-left: 6px solid var(--warn-border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: #8B5A08;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.status-alert {
+    background: var(--danger-bg);
+    border-left: 6px solid var(--danger-border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: #8A2323;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.founder-card {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8FBFF 100%);
+    border: 1px solid #DDE7F2;
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: 0 10px 26px rgba(31, 78, 121, 0.08);
+}
+
+.photo-placeholder {
+    background: linear-gradient(180deg, #FFF7E6 0%, #F2F7FD 100%);
+    border: 1px solid #E4EAF3;
+    border-radius: 18px;
+    text-align: center;
+    padding: 28px 10px;
+    color: var(--blue);
+}
+
+div.stButton > button {
+    background: linear-gradient(135deg, var(--blue) 0%, #2C689B 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.62rem 1rem;
+    font-weight: 700;
+}
+
+div.stDownloadButton > button {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.62rem 1rem;
+    font-weight: 800;
+}
+
+div[data-testid="stMetric"] {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+}
+
+h2, h3 {
+    color: var(--blue);
+}
+
+.block-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blue);
+    margin-bottom: 8px;
+}
+</style>
 """, unsafe_allow_html=True)
 
 st.markdown("""
-    <div class="banner">
-        <div class="banner-title">GoldenNest Care</div>
-        <div class="banner-subtitle">Smarter Daily Care for Seniors</div>
-        <div class="banner-text">
-            A multi-facility senior care coordination platform for wellness tracking,
-            caregiver support, medication support documentation, and daily reporting.
+<div class="main-title-card">
+    <div class="brand-row">
+        <div class="logo-circle">GN</div>
+        <div>
+            <div class="brand-title">GoldenNest Care</div>
+            <div class="brand-subtitle">Smarter Daily Care for Seniors</div>
+            <div class="brand-text">
+                A multi-facility senior care coordination platform for wellness tracking, caregiver support,
+                medication support documentation, and daily reporting.
+            </div>
         </div>
     </div>
+</div>
 """, unsafe_allow_html=True)
 
-st.sidebar.header("GoldenNest Care")
-st.sidebar.write("Senior care workflow prototype for daily wellness planning, caregiver coordination, and reporting.")
+st.sidebar.markdown("## GoldenNest Care")
+st.sidebar.write("Luxury-style senior care workflow dashboard for daily coordination, documentation, and reporting.")
 
 facilities = {
     "GoldenNest Oakland": {
@@ -203,39 +390,54 @@ facilities = {
     }
 }
 
-selected_date = st.date_input("Care Date", value=date.today())
-selected_facility = st.selectbox("Select Facility", list(facilities.keys()))
-facility_data = facilities[selected_facility]
-
-selected_resident = st.selectbox("Select Resident", list(facility_data["residents"].keys()))
-profile = facility_data["residents"][selected_resident]
+st.markdown('<div class="section-shell">', unsafe_allow_html=True)
+colf1, colf2, colf3 = st.columns(3)
+with colf1:
+    selected_date = st.date_input("Care Date", value=date.today())
+with colf2:
+    selected_facility = st.selectbox("Select Facility", list(facilities.keys()))
+with colf3:
+    facility_data = facilities[selected_facility]
+    selected_resident = st.selectbox("Select Resident", list(facility_data["residents"].keys()))
 assigned_caregiver = st.selectbox("Assigned Caregiver", facility_data["caregivers"])
+st.markdown('</div>', unsafe_allow_html=True)
 
+profile = facility_data["residents"][selected_resident]
+
+st.markdown('<div class="section-shell">', unsafe_allow_html=True)
 st.markdown("## Resident Profile")
-
 col1, col2 = st.columns(2)
 
 with col1:
-    st.info(f"""
+    st.markdown('<div class="profile-box">', unsafe_allow_html=True)
+    st.markdown(f"""
 **Name:** {selected_resident}  
 **Age:** {profile['Age']}  
 **DOB:** {profile['DOB']}  
 **Room:** {profile['Room']}  
 **Emergency Contact:** {profile['Emergency Contact']}
 """)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 with col2:
-    st.info(f"""
+    st.markdown('<div class="profile-box">', unsafe_allow_html=True)
+    st.markdown(f"""
 **Primary Condition:** {profile['Primary Condition']}  
 **Mobility Status:** {profile['Mobility Status']}  
 **Cognitive Status:** {profile['Cognitive Status']}  
 **Medication Support:** {profile['Medication Support']}  
 **Allergies:** {profile['Allergies']}
 """)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-st.markdown("### Wellness Priorities")
-st.write(profile["Wellness Priorities"])
+st.markdown(f"""
+<div class="mini-note">
+<b>Wellness Priorities:</b> {profile["Wellness Priorities"]}
+</div>
+""", unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
+st.markdown('<div class="section-shell">', unsafe_allow_html=True)
 st.markdown("## 💊 Medication Support List")
 st.caption("Caregivers can add, review, or update multiple medication support entries for a resident.")
 
@@ -243,24 +445,26 @@ if "med_rows" not in st.session_state:
     st.session_state.med_rows = 3
 
 col_a, col_b = st.columns([1, 1])
-
 with col_a:
     if st.button("➕ Add Medication Row"):
         st.session_state.med_rows += 1
-
 with col_b:
     if st.button("➖ Remove Medication Row") and st.session_state.med_rows > 1:
         st.session_state.med_rows -= 1
 
-medication_df = pd.DataFrame(
-    {
-        "Medication Name": [""] * st.session_state.med_rows,
-        "Strength": [""] * st.session_state.med_rows,
-        "Schedule": [""] * st.session_state.med_rows,
-        "Instructions": [""] * st.session_state.med_rows,
-        "Physician Reference": [""] * st.session_state.med_rows
-    }
-)
+default_rows = st.session_state.get("med_table_data")
+if default_rows is None or len(default_rows) != st.session_state.med_rows:
+    medication_df = pd.DataFrame(
+        {
+            "Medication Name": [""] * st.session_state.med_rows,
+            "Strength": [""] * st.session_state.med_rows,
+            "Schedule": [""] * st.session_state.med_rows,
+            "Instructions": [""] * st.session_state.med_rows,
+            "Physician Reference": [""] * st.session_state.med_rows
+        }
+    )
+else:
+    medication_df = pd.DataFrame(default_rows)
 
 edited_medications = st.data_editor(
     medication_df,
@@ -268,6 +472,8 @@ edited_medications = st.data_editor(
     use_container_width=True,
     key="med_table"
 )
+st.session_state.med_table_data = edited_medications.to_dict(orient="records")
+st.markdown('</div>', unsafe_allow_html=True)
 
 morning_tasks = [
     "Wake up / morning check-in",
@@ -317,33 +523,38 @@ night_tasks = [
 status_options = ["Complete", "Missed", "Delayed", "Not Needed Today"]
 results = {}
 
-def render_task_section(title, task_list):
+def render_task_section(title, task_list, key_prefix):
+    st.markdown('<div class="section-shell">', unsafe_allow_html=True)
     st.markdown(f"## {title}")
-    for task in task_list:
-        results[task] = st.selectbox(task, status_options, key=task)
+    for i, task in enumerate(task_list):
+        results[task] = st.selectbox(task, status_options, key=f"{key_prefix}_{i}")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-render_task_section("Morning Routine", morning_tasks)
-render_task_section("Daytime Activities", day_tasks)
-render_task_section("Engagement & Monitoring", engagement_tasks)
-render_task_section("Evening Routine", evening_tasks)
-render_task_section("Night Routine", night_tasks)
+render_task_section("Morning Routine", morning_tasks, "morning")
+render_task_section("Daytime Activities", day_tasks, "day")
+render_task_section("Engagement & Monitoring", engagement_tasks, "engage")
+render_task_section("Evening Routine", evening_tasks, "evening")
+render_task_section("Night Routine", night_tasks, "night")
 
 df = pd.DataFrame(list(results.items()), columns=["Task", "Status"])
 
+st.markdown('<div class="section-shell">', unsafe_allow_html=True)
 st.markdown("## Daily Status")
-st.dataframe(df, width="stretch")
+st.dataframe(df, use_container_width=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
 complete_count = (df["Status"] == "Complete").sum()
 missed_count = (df["Status"] == "Missed").sum()
 delayed_count = (df["Status"] == "Delayed").sum()
 not_needed_count = (df["Status"] == "Not Needed Today").sum()
 
+st.markdown('<div class="section-shell">', unsafe_allow_html=True)
 st.markdown("## Summary")
 c1, c2, c3, c4 = st.columns(4)
-c1.metric("Completed", int(complete_count))
-c2.metric("Missed", int(missed_count))
-c3.metric("Delayed", int(delayed_count))
-c4.metric("Not Needed", int(not_needed_count))
+c1.metric("Completed", int(complete_count), border=True)
+c2.metric("Missed", int(missed_count), border=True)
+c3.metric("Delayed", int(delayed_count), border=True)
+c4.metric("Not Needed", int(not_needed_count), border=True)
 
 caregiver_notes = st.text_area(
     "Caregiver Notes",
@@ -351,11 +562,12 @@ caregiver_notes = st.text_area(
 )
 
 if missed_count >= 3:
-    st.error("High attention needed: several daily care tasks were missed.")
+    st.markdown('<div class="status-alert">High attention needed: several daily care tasks were missed.</div>', unsafe_allow_html=True)
 elif missed_count >= 1 or delayed_count >= 3:
-    st.warning("Follow-up recommended: review incomplete or delayed tasks.")
+    st.markdown('<div class="status-watch">Follow-up recommended: review incomplete or delayed tasks.</div>', unsafe_allow_html=True)
 else:
-    st.success("Daily care activities are on track.")
+    st.markdown('<div class="status-good">Daily care activities are on track.</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
 if missed_count >= 3:
     risk_level = "High"
@@ -378,8 +590,6 @@ for i, med in enumerate(medications_for_report, start=1):
 
 med_report_text = "\n".join(formatted_meds) if formatted_meds else "No medication entries recorded."
 
-st.markdown("## Daily Report")
-
 report_text = f"""
 Facility: {selected_facility}
 Date: {selected_date}
@@ -399,32 +609,48 @@ Caregiver Notes:
 {caregiver_notes if caregiver_notes else "No caregiver notes entered."}
 """
 
-st.text_area("Generated Daily Report", value=report_text, height=350)
-
+st.markdown('<div class="section-shell">', unsafe_allow_html=True)
+st.markdown("## Daily Report")
+st.text_area("Generated Daily Report", value=report_text, height=330)
 st.download_button(
     label="Download Daily Report",
     data=report_text,
     file_name=f"{selected_resident.lower().replace(' ', '_')}_daily_report.txt",
     mime="text/plain"
 )
+st.markdown('</div>', unsafe_allow_html=True)
 
+st.markdown('<div class="section-shell">', unsafe_allow_html=True)
 st.markdown("## Founder")
 founder_col1, founder_col2 = st.columns([1, 3])
 
 with founder_col1:
-    st.image("founder.jpeg", width=220)
+    image_path = Path(__file__).parent / "founder.jpg"
+    if image_path.exists():
+        st.image(str(image_path), width=220)
+    else:
+        st.markdown("""
+        <div class="photo-placeholder">
+            <div style="font-size:48px;">👩‍💼</div>
+            <div style="font-weight:800; margin-top:8px;">Founder Photo</div>
+            <div style="font-size:14px; color:#5B6B7A; margin-top:6px;">
+                Add founder.jpg to your project folder
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 with founder_col2:
     st.markdown("""
         <div class="founder-card">
-            <h3 style="margin-top:0; color:#8B6F1E;">THAZIN MYA LWIN</h3>
-            <p style="font-size:18px; font-weight:600; color:#1F3B5B; margin-bottom:8px;">
+            <h3 style="margin-top:0; color:#8A6A12;">THAZIN MYA LWIN</h3>
+            <p style="font-size:18px; font-weight:700; color:#1F4E79; margin-bottom:8px;">
                 Founder of GoldenNest Care
             </p>
-            <p style="font-size:15px; color:#4B5563; line-height:1.6;">
+            <p style="font-size:15px; color:#4B5D70; line-height:1.75;">
                 MBA candidate building a smarter daily care coordination platform for senior care homes.
                 GoldenNest Care is designed to improve daily wellness tracking, caregiver coordination,
                 reporting, and operational visibility across senior living facilities.
             </p>
         </div>
     """, unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
