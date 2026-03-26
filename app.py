@@ -224,14 +224,14 @@ h2, h3 {
 st.markdown("""
 <div class="main-title-card">
     <div class="brand-row">
-        <div class="logo-circle">GN</div>
-        <div>
-            <div class="brand-title">GoldenNest Care</div>
-            <div class="brand-subtitle">Smarter Daily Care for Seniors</div>
-            <div class="brand-text">
-                A multi-facility senior care coordination platform for wellness tracking, caregiver support,
-                medication support documentation, and daily reporting.
-            </div>
+<div class="brand-row">
+    <img src="GoldenNest-Care-logo-design.jpg" width="120" height="120" alt="GoldenNest Care Logo">
+    <div>
+        <div class="brand-title">GoldenNest Care</div>
+        <div class="brand-subtitle">Smarter Daily Care for Seniors</div>
+        <div class="brand-text">
+            A multi-facility senior care coordination platform for wellness tracking, caregiver support,
+            medication support documentation, and daily reporting.
         </div>
     </div>
 </div>
