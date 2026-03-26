@@ -223,7 +223,7 @@ h2, h3 {
 
 st.markdown("""
 <div class="brand-row">
-    <img src="GoldenNest-Care-logo-design.jpg" alt="GoldenNest Care Logo" style="width:140px; height:auto; border-radius:16px;">
+    <img src="GoldenNest-Care-logo-design.jpeg" alt="GoldenNest Care Logo" style="width:140px; height:auto; border-radius:16px;">
     <div>
         <div class="brand-title">GoldenNest Care</div>
         <div class="brand-subtitle">Smarter Daily Care for Seniors</div>
