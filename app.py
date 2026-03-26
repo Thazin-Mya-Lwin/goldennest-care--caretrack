@@ -220,11 +220,22 @@ h2, h3 {
 }
 </style>
 """, unsafe_allow_html=True)
-# GoldenNest Care Header with Logo
-col_logo, col_text = st.columns([1, 4])
 
-with col_logo:
-st.image("GoldenNest Care logo design.jpeg")
+st.markdown("""
+<div class="main-title-card">
+    <div class="brand-row">
+        <div class="logo-circle">GN</div>
+        <div>
+            <div class="brand-title">GoldenNest Care</div>
+            <div class="brand-subtitle">Smarter Daily Care for Seniors</div>
+            <div class="brand-text">
+                A multi-facility senior care coordination platform for wellness tracking, caregiver support,
+                medication support documentation, and daily reporting.
+            </div>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 st.sidebar.markdown("## GoldenNest Care")
 st.sidebar.write("Luxury-style senior care workflow dashboard for daily coordination, documentation, and reporting.")
@@ -614,7 +625,7 @@ st.markdown("## Founder")
 founder_col1, founder_col2 = st.columns([1, 3])
 
 with founder_col1:
-    image_path = Path(__file__).parent / "founder.jpeg"
+    image_path = Path(__file__).parent / "founder.jpg"
     if image_path.exists():
         st.image(str(image_path), width=220)
     else:
