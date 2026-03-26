@@ -412,7 +412,7 @@ st.markdown("## Founder")
 founder_col1, founder_col2 = st.columns([1, 3])
 
 with founder_col1:
-    st.image("founder.jpg", width=220)
+    st.image("founder.jpeg", width=220)
 
 with founder_col2:
     st.markdown("""
