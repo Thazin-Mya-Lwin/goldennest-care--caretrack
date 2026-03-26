@@ -224,7 +224,7 @@ h2, h3 {
 col_logo, col_text = st.columns([1, 4])
 
 with col_logo:
-st.image("GoldenNest Care logo design.jpg")
+st.image("GoldenNest Care logo design.jpeg")
 
 st.sidebar.markdown("## GoldenNest Care")
 st.sidebar.write("Luxury-style senior care workflow dashboard for daily coordination, documentation, and reporting.")
