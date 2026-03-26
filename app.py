@@ -625,7 +625,7 @@ st.markdown("## Founder")
 founder_col1, founder_col2 = st.columns([1, 3])
 
 with founder_col1:
-    image_path = Path(__file__).parent / "founder.jpg"
+    image_path = Path(__file__).parent / "founder.jpeg"
     if image_path.exists():
         st.image(str(image_path), width=220)
     else:
