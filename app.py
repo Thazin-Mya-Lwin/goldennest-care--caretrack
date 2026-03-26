@@ -224,8 +224,7 @@ h2, h3 {
 col_logo, col_text = st.columns([1, 4])
 
 with col_logo:
-    st.image("GoldenNest-Care-logo-design
-
+st.image("GoldenNest-Care-logo-design
 """, unsafe_allow_html=True)
 
 st.sidebar.markdown("## GoldenNest Care")
