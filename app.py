@@ -223,9 +223,8 @@ h2, h3 {
 
 st.markdown("""
 <div class="main-title-card">
-    <div class="brand-row">
 <div class="brand-row">
-    <img src="GoldenNest-Care-logo-design.jpeg" width="120" height="120" alt="GoldenNest Care Logo">
+    <img src="GoldenNest-Care-logo.jpeg" width="120" height="120" alt="GoldenNest Care Logo">
     <div>
         <div class="brand-title">GoldenNest Care</div>
         <div class="brand-subtitle">Smarter Daily Care for Seniors</div>
